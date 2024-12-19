@@ -1,0 +1,16 @@
+<!-- myclinic/templates/myclinic/customer_support.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Support</title>
+</head>
+<body>
+    <h1>Customer Support</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!-- myclinic/templates/myclinic/delivery_details.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delivery Details</title>
+</head>
+<body>
+    <h1>Delivery Details</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
