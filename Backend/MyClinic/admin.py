@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomerSupport, DeliveryDetail, Appointment, AmbulanceRequest
+from .models import CustomerSupport, DeliveryDetail, Appointment, AmbulanceRequest, Login, SignUp
 
 class CustomerSupportAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'message')
@@ -20,7 +20,17 @@ class AmbulanceRequestAdmin(admin.ModelAdmin):
     search_fields = ('caretaker_name', 'patient_name', 'phone_number')
     list_filter = ('emergency',)
 
+class LoginAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+    search_fields = ('email',)
+
+class SignUpAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'department', 'email', 'esn')
+    search_fields = ('first_name', 'last_name', 'department', 'email', 'esn')
+
 admin.site.register(CustomerSupport, CustomerSupportAdmin)
 admin.site.register(DeliveryDetail, DeliveryDetailAdmin)
 admin.site.register(Appointment, AppointmentAdmin)
 admin.site.register(AmbulanceRequest, AmbulanceRequestAdmin)
+admin.site.register(Login, LoginAdmin)
+admin.site.register(SignUp, SignUpAdmin)
