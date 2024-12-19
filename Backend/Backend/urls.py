@@ -18,12 +18,12 @@ Including another URLconf
 
 # Backend/urls.py
 
+# Backend/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
-from MyClinic import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.customer_support, name='home'),  # Redirect root URL to customer_support view
-    path('MyClinic/', include('MyClinic.urls')),
+    path('api/', include('MyClinic.urls')),
 ]

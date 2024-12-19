@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import { login } from "../Reducers/authReducer";
 
 function Login() {
@@ -9,9 +10,15 @@ function Login() {
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(login({ email, password }));
+        try {
+            const response = await axios.post("http://127.0.0.1:8000/api/login/authenticate/", { email, password });
+            console.log(response.data);
+            // Dispatch your Redux action here if needed
+        } catch (error) {
+            console.error("There was an error!", error);
+        }
     };
 
     return (

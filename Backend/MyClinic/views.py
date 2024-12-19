@@ -1,45 +1,44 @@
 # myclinic/views.py
 
-from django.shortcuts import render, redirect
-from .models import CustomerSupport, DeliveryDetail, Appointment, AmbulanceRequest
-from .forms import CustomerSupportForm, DeliveryDetailForm, AppointmentForm, AmbulanceRequestForm
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from .models import SignUp, Login, CustomerSupport, DeliveryDetail, Appointment, AmbulanceRequest
+from .serializers import SignUpSerializer, LoginSerializer, CustomerSupportSerializer, DeliveryDetailSerializer, AppointmentSerializer, AmbulanceRequestSerializer
 
-def customer_support(request):
-    if request.method == 'POST':
-        form = CustomerSupportForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('customer_support')
-    else:
-        form = CustomerSupportForm()
-    return render(request, 'myclinic/customer_support.html', {'form': form})
 
-def delivery_details(request):
-    if request.method == 'POST':
-        form = DeliveryDetailForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('delivery_details')
-    else:
-        form = DeliveryDetailForm()
-    return render(request, 'myclinic/delivery_details.html', {'form': form})
+class LoginViewSet(viewsets.ModelViewSet):
+    queryset = Login.objects.all()
+    serializer_class = LoginSerializer
 
-def appointments(request):
-    if request.method == 'POST':
-        form = AppointmentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('appointments')
-    else:
-        form = AppointmentForm()
-    return render(request, 'myclinic/appointments.html', {'form': form})
+    @action(detail=False, methods=['post'])
+    def authenticate(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        try:
+            user = Login.objects.get(email=email)
+            if user.check_password(password):
+                return Response({'status': 'success', 'message': 'Authenticated successfully'})
+            else:
+                return Response({'status': 'error', 'message': 'Invalid password'}, status=400)
+        except Login.DoesNotExist:
+            return Response({'status': 'error', 'message': 'User not found'}, status=404)
+class CustomerSupportViewSet(viewsets.ModelViewSet):
+    queryset = CustomerSupport.objects.all()
+    serializer_class = CustomerSupportSerializer
 
-def ambulance_request(request):
-    if request.method == 'POST':
-        form = AmbulanceRequestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('ambulance_request')
-    else:
-        form = AmbulanceRequestForm()
-    return render(request, 'myclinic/ambulance_request.html', {'form': form})
+class DeliveryDetailViewSet(viewsets.ModelViewSet):
+    queryset = DeliveryDetail.objects.all()
+    serializer_class = DeliveryDetailSerializer
+
+class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+
+class AmbulanceRequestViewSet(viewsets.ModelViewSet):
+    queryset = AmbulanceRequest.objects.all()
+    serializer_class = AmbulanceRequestSerializer
+
+class SignUpViewSet(viewsets.ModelViewSet):
+    queryset = SignUp.objects.all()
+    serializer_class = SignUpSerializer
