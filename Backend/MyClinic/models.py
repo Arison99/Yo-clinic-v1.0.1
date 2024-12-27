@@ -13,6 +13,14 @@ class Login(models.Model):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
+    def authenticate(self, email, raw_password):
+        try:
+            user = Login.objects.get(email=email)
+            if user.check_password(raw_password):
+                return user
+        except Login.DoesNotExist:
+            return None
+
     def __str__(self):
         return self.email
 

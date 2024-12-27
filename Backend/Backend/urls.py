@@ -20,10 +20,12 @@ Including another URLconf
 
 # Backend/urls.py
 
+from MyClinic.views import authenticate_user 
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+     path('login/authenticate/', authenticate_user, name='authenticate_user'),
     path('api/', include('MyClinic.urls')),
 ]

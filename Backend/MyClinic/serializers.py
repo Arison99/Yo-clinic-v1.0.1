@@ -9,13 +9,23 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ['email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = Login(
-            email=validated_data['email']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
+
+        if email and password:
+            try:
+                user = Login.objects.get(email=email)
+            except Login.DoesNotExist:
+                raise serializers.ValidationError("Invalid email or password")
+            
+            if not user.check_password(password):
+                raise serializers.ValidationError("Invalid email or password")
+        else:
+            raise serializers.ValidationError("Must include both email and password")
+
+        data['user'] = user
+        return data
 
 class CustomerSupportSerializer(serializers.ModelSerializer):
     class Meta:

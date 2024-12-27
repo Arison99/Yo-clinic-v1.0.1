@@ -13,7 +13,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/login/authenticate/", { email, password });
+            const response = await axios.post("http://localhost:3000/api/login", { email, password });
             console.log(response.data);
             // Dispatch your Redux action here if needed
         } catch (error) {

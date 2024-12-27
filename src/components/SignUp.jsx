@@ -5,12 +5,12 @@ import { signUp } from "../Reducers/authReducer";
 
 function SignUp() {
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        first_Name: "",
+        last_Name: "",
         department: "",
         email: "",
         esn: "",
-        password: "" // Added password field
+        password: ""
     });
 
     const dispatch = useDispatch();
@@ -27,26 +27,23 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/signup/", formData, {
+            const response = await axios.post("http://localhost:3000/api/signup", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-
-            console.log(response.data); // Handle successful response here
+            console.log(response.data);
             // Dispatch your Redux action here if needed
         } catch (error) {
-            console.error("There was an error!", error);
-
             if (error.response) {
-                // This block will handle errors returned from the server
+                // Server responded with a status other than 200 range
                 console.error("Server responded with error:", error.response.data);
                 alert(`Error: ${error.response.data.message || 'Something went wrong!'}`);
             } else if (error.request) {
-                // This block handles the case where no response was received from the server
+                // No response received from the server
                 console.error("No response received:", error.request);
             } else {
-                // This block handles errors in setting up the request
+                // Error in setting up the request
                 console.error("Request setup error:", error.message);
             }
         }
@@ -59,8 +56,8 @@ function SignUp() {
                     <label className="block text-gray-700 text-sm font-bold mb-2">First Name:</label>
                     <input
                         type="text"
-                        name="firstName"
-                        value={formData.firstName}
+                        name="first_Name"
+                        value={formData.first_Name}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
@@ -69,13 +66,12 @@ function SignUp() {
                     <label className="block text-gray-700 text-sm font-bold mb-2">Last Name:</label>
                     <input
                         type="text"
-                        name="lastName"
-                        value={formData.lastName}
+                        name="last_Name"
+                        value={formData.last_Name}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
-
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">Department:</label>
                     <select
