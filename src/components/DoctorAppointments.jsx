@@ -15,8 +15,8 @@ function DoctorAppointments() {
                     lastName: "Doe",
                     phone: "123-456-7890",
                     address: "123 Main St",
-                    appointmentDate: "2024-10-21",
-                    appointmentTime: "10:00",
+                    appointment_Date: "2024-10-21",
+                    appointment_Time: "10:00",
                 },
                 {
                     id: 2,
@@ -24,8 +24,8 @@ function DoctorAppointments() {
                     lastName: "Smith",
                     phone: "987-654-3210",
                     address: "456 Elm St",
-                    appointmentDate: "2024-10-22",
-                    appointmentTime: "14:00",
+                    appointment_Date: "2024-10-22",
+                    appointment_Time: "14:00",
                 },
             ];
             setAppointments(data);
@@ -60,8 +60,8 @@ function DoctorAppointments() {
                             <td className="border px-4 py-2">{appointment.lastName}</td>
                             <td className="border px-4 py-2">{appointment.phone}</td>
                             <td className="border px-4 py-2">{appointment.address}</td>
-                            <td className="border px-4 py-2">{appointment.appointmentDate}</td>
-                            <td className="border px-4 py-2">{appointment.appointmentTime}</td>
+                            <td className="border px-4 py-2">{appointment.appointment_Date}</td>
+                            <td className="border px-4 py-2">{appointment.appointment_Time}</td>
                         </tr>
                     ))}
                 </tbody>

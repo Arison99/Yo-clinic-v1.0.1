@@ -37,8 +37,9 @@ class LoginViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def authenticate(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+        data = request.data
+        email = data.get('email')
+        password = data.get('password')
 
         if not email or not password:
             return Response({'status': 'error', 'message': 'Email and password are required'}, status=400)
@@ -64,6 +65,13 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
 
+    @action(detail=False, methods=['post'])
+    def create_appointment(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': 'success', 'message': 'Appointment created successfully'})
+        return Response({'status': 'error', 'message': serializer.errors}, status=400)
 class AmbulanceRequestViewSet(viewsets.ModelViewSet):
     queryset = AmbulanceRequest.objects.all()
     serializer_class = AmbulanceRequestSerializer

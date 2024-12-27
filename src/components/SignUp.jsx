@@ -12,6 +12,7 @@ function SignUp() {
         esn: "",
         password: ""
     });
+    const [successMessage, setSuccessMessage] = useState("");
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
@@ -33,6 +34,7 @@ function SignUp() {
                 },
             });
             console.log(response.data);
+            setSuccessMessage("Signup successful! Welcome to the clinic.");
             // Dispatch your Redux action here if needed
         } catch (error) {
             if (error.response) {
@@ -123,6 +125,7 @@ function SignUp() {
                     {loading ? "Submitting..." : "Sign Up"}
                 </button>
                 {error && <p className="text-red-500 mt-4">{error}</p>}
+                {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
             </form>
         </div>
     );

@@ -9,14 +9,14 @@ import {
 
 function AppointmentsForm() {
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
+        first_name: '',
+        last_name: '',
         phone: '',
         address: '',
-        appointmentDate: '',
-        appointmentTime: '',
+        appointment_date: '',
+        appointment_time: '',
         department: '',
-        doctorName: ''
+        doctor_name: ''
     });
 
     const dispatch = useDispatch();
@@ -30,11 +30,11 @@ function AppointmentsForm() {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { 
         e.preventDefault();
         dispatch(bookAppointmentStart());
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/appointments/", formData);
+            const response = await axios.post("http://localhost:3000/api/appointments", formData);
             dispatch(bookAppointmentSuccess(response.data));
             console.log("Appointment booked:", response.data);
         } catch (error) {
@@ -48,22 +48,22 @@ function AppointmentsForm() {
                 <p className="font-sans text-center font-semibold leading-none">Appointments Form</p>
                 {error && <p className="text-red-500">{error}</p>}
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">First Name</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="first_name">First Name</label>
                     <input
                         type="text"
-                        name="firstName"
-                        value={formData.firstName}
+                        name="first_name"
+                        value={formData.first_name}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">Last Name</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="last_name">Last Name</label>
                     <input
                         type="text"
-                        name="lastName"
-                        value={formData.lastName}
+                        name="last_name"
+                        value={formData.last_name}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
@@ -92,22 +92,22 @@ function AppointmentsForm() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="appointmentDate">Date for Appointment</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="appointment_date">Date for Appointment</label>
                     <input
                         type="date"
-                        name="appointmentDate"
-                        value={formData.appointmentDate}
+                        name="appointment_date"
+                        value={formData.appointment_date}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="appointmentTime">Time for Appointment</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="appointment_time">Time for Appointment</label>
                     <input
                         type="time"
-                        name="appointmentTime"
-                        value={formData.appointmentTime}
+                        name="appointment_time"
+                        value={formData.appointment_time}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
@@ -132,11 +132,11 @@ function AppointmentsForm() {
                 </select>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="doctorName">Doctor's Name</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="doctor_name">Doctor's Name</label>
                     <input
                         type="text"
-                        name="doctorName"
-                        value={formData.doctorName}
+                        name="doctor_name"
+                        value={formData.doctor_name}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required

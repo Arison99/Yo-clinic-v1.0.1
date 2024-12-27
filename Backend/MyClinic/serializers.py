@@ -40,8 +40,7 @@ class DeliveryDetailSerializer(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = '__all__'
-
+        fields = ['first_name', 'last_name', 'phone', 'address', 'appointment_date', 'appointment_time', 'department', 'doctor_name']
 class AmbulanceRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = AmbulanceRequest

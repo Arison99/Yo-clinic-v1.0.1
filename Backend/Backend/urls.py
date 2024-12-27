@@ -22,10 +22,16 @@ Including another URLconf
 
 from MyClinic.views import authenticate_user 
 from django.contrib import admin
+from rest_framework.routers import DefaultRouter
 from django.urls import path, include
+from MyClinic.views import AppointmentViewSet
+
+router = DefaultRouter()
+router.register(r'appointments', AppointmentViewSet, basename='appointment')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('login/authenticate/', authenticate_user, name='authenticate_user'),
+    path('api/login/authenticate/', authenticate_user, name='authenticate_user'),
     path('api/', include('MyClinic.urls')),
 ]

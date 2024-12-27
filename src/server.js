@@ -20,7 +20,7 @@ app.use(cors({
 const testDjangoBackend = async () => {
     try {
         const response = await axios.get('http://127.0.0.1:8000/api/signup/');
-        console.log('Django backend is listening:', response.data);
+        console.log('Django backend is listening:');
     } catch (error) {
         console.error('Error connecting to Django backend:', error);
     }
@@ -28,33 +28,7 @@ const testDjangoBackend = async () => {
 
 
 // Route to handle sign-up requests
-app.post('/api/signup', async (req, res) => {
-    console.log('Received sign-up request:', req.body);
-    try {
-        const requestData = {
-            first_name: req.body.first_Name,
-            last_name: req.body.last_Name,
-            department: req.body.department,
-            email: req.body.email,
-            esn: req.body.esn,
-            password: req.body.password
-        };
-        const response = await axios.post('http://127.0.0.1:8000/api/signup/', requestData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        console.log('Sign-up response:', response.data);
-        res.status(response.status).json(response.data);
-    } catch (error) {
-        console.error('Sign-up error:', error);
-        if (error.response) {
-            res.status(error.response.status).json(error.response.data);
-        } else {
-            res.status(500).json({ message: 'Internal Server Error' });
-        }
-    }
-});
+// Removed duplicate sign-up route handler
 
 // Route to handle login requests
 app.post('/api/login', async (req, res) => {
@@ -159,22 +133,14 @@ app.listen(PORT, async () => {
 // Route to handle sign-up requests
 app.post('/api/signup', async (req, res) => {
     console.log('Received sign-up request:', req.body);
-
-    const { first_Name, last_Name, department, email, esn, password } = req.body;
-
-    // Validate required fields
-    if (!first_Name || !last_Name || !department || !email || !esn || !password) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
-
     try {
         const requestData = {
-            first_name: first_Name,
-            last_name: last_Name,
-            department: department,
-            email: email,
-            esn: esn,
-            password: password
+            first_name: req.body.first_Name,
+            last_name: req.body.last_Name,
+            department: req.body.department,
+            email: req.body.email,
+            esn: req.body.esn,
+            password: req.body.password
         };
         const response = await axios.post('http://127.0.0.1:8000/api/signup/', requestData, {
             headers: {
