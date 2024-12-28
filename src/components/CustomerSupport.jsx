@@ -19,7 +19,7 @@ function CustomerSupport() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/customer-support/", formData);
+            const response = await axios.post("http://localhost:3000/api/customer-support/", formData);
             console.log('Form data submitted:', response.data);
         } catch (error) {
             console.error("There was an error!", error);

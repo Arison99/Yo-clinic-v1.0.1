@@ -24,9 +24,10 @@ from MyClinic.views import authenticate_user
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
-from MyClinic.views import AppointmentViewSet
+from MyClinic.views import AppointmentViewSet,  DoctorAppointmentViewSet
 
 router = DefaultRouter()
+router.register(r'doctor-appointments', DoctorAppointmentViewSet, basename='doctorappointment')
 router.register(r'appointments', AppointmentViewSet, basename='appointment')
 
 

@@ -1,7 +1,8 @@
 # myclinic/serializers.py
+
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from .models import SignUp, Login, CustomerSupport, DeliveryDetail, Appointment, AmbulanceRequest
+from .models import SignUp, Login, CustomerSupport, DeliveryDetail, Appointment, AmbulanceRequest, DoctorAppointment
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,8 +16,8 @@ class LoginSerializer(serializers.ModelSerializer):
 
         if email and password:
             try:
-                user = Login.objects.get(email=email)
-            except Login.DoesNotExist:
+                user = SignUp.objects.get(email=email)
+            except SignUp.DoesNotExist:
                 raise serializers.ValidationError("Invalid email or password")
             
             if not user.check_password(password):
@@ -41,6 +42,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['first_name', 'last_name', 'phone', 'address', 'appointment_date', 'appointment_time', 'department', 'doctor_name']
+
 class AmbulanceRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = AmbulanceRequest
@@ -55,3 +57,13 @@ class SignUpSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
+
+class DoctorAppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorAppointment
+        fields = []
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['appointments'] = AppointmentSerializer(Appointment.objects.all(), many=True).data
+        return representation

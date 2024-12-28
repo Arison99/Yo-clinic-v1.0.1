@@ -1,71 +1,82 @@
 import React, { useState, useEffect } from "react";
-import AppointmentsForm from "./AppointmentsForm"; // Import the AppointmentsForm component
+import axios from "axios";
+
+const jsonifyData = (data) => {
+    return {
+        id: data.id,
+        first_name: JSON.stringify(data.first_name),
+        last_name: JSON.stringify(data.last_name),
+        phone: JSON.stringify(data.phone),
+        address: JSON.stringify(data.address),
+        appointment_date: JSON.stringify(data.appointment_date),
+        appointment_time: JSON.stringify(data.appointment_time),
+        department: JSON.stringify(data.department),
+        doctor_name: JSON.stringify(data.doctor_name),
+    };
+};
 
 function DoctorAppointments() {
     const [appointments, setAppointments] = useState([]);
 
-    // Example data, replace this with actual data fetching logic
     useEffect(() => {
         const fetchAppointments = async () => {
-            // Replace this with actual API call
-            const data = [
-                {
-                    id: 1,
-                    firstName: "John",
-                    lastName: "Doe",
-                    phone: "123-456-7890",
-                    address: "123 Main St",
-                    appointment_Date: "2024-10-21",
-                    appointment_Time: "10:00",
-                },
-                {
-                    id: 2,
-                    firstName: "Jane",
-                    lastName: "Smith",
-                    phone: "987-654-3210",
-                    address: "456 Elm St",
-                    appointment_Date: "2024-10-22",
-                    appointment_Time: "14:00",
-                },
-            ];
-            setAppointments(data);
+            try {
+                const response = await axios.get("http://localhost:3000/api/doctor-appointments");
+                console.log("Fetched appointments:", response.data);
+
+                // Flatten the array of appointments
+                const flattenedData = response.data.flatMap(item => item.appointments);
+                console.log("Flattened data:", flattenedData);
+
+                // Filter out repeated data based on first name
+                const uniqueAppointments = [];
+                const firstNameSet = new Set();
+
+                flattenedData.forEach(item => {
+                    const firstName = item.first_name;
+                    if (!firstNameSet.has(firstName)) {
+                        firstNameSet.add(firstName);
+                        uniqueAppointments.push(item);
+                    }
+                });
+
+                console.log("Filtered unique appointments:", uniqueAppointments);
+
+                // Jsonify the unique appointments
+                const jsonifiedAppointments = uniqueAppointments.map((appointment, index) => ({
+                    ...jsonifyData(appointment),
+                    id: index + 1, // Assign unique ID starting from 1
+                }));
+                console.log("Jsonified appointments for display:", jsonifiedAppointments);
+
+                setAppointments(jsonifiedAppointments);
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
+            }
         };
 
         fetchAppointments();
     }, []);
 
-    const addAppointment = (newAppointment) => {
-        setAppointments((prevAppointments) => [...prevAppointments, newAppointment]);
-    };
-
     return (
-        <div className="p-8 bg-white rounded-lg">
-            <p className="font-sans text-center font-semibold leading-none">Doctor's Appointments</p>
-            <AppointmentsForm addAppointment={addAppointment} /> {/* Include the form component */}
-            <table className="min-w-full bg-white mt-4">
-                <thead>
-                    <tr>
-                        <th className="py-2">First Name</th>
-                        <th className="py-2">Last Name</th>
-                        <th className="py-2">Phone</th>
-                        <th className="py-2">Address</th>
-                        <th className="py-2">Date</th>
-                        <th className="py-2">Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {appointments.map((appointment) => (
-                        <tr key={appointment.id}>
-                            <td className="border px-4 py-2">{appointment.firstName}</td>
-                            <td className="border px-4 py-2">{appointment.lastName}</td>
-                            <td className="border px-4 py-2">{appointment.phone}</td>
-                            <td className="border px-4 py-2">{appointment.address}</td>
-                            <td className="border px-4 py-2">{appointment.appointment_Date}</td>
-                            <td className="border px-4 py-2">{appointment.appointment_Time}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="p-8 bg-white rounded-lg ml-72">
+            <p className="font-semibold text-center text-3xl leading-none text-gray-600">Doctor's Appointments</p>
+            {appointments.length > 0 ? (
+                appointments.map((appointment) => (
+                    <div key={appointment.id} className="mt-4 border p-4 rounded-lg shadow-md bg-gray-100 max-w-2xl">
+                        <p><strong>First Name:</strong> {appointment.first_name}</p>
+                        <p><strong>Last Name:</strong> {appointment.last_name}</p>
+                        <p><strong>Phone:</strong> {appointment.phone}</p>
+                        <p><strong>Address:</strong> {appointment.address}</p>
+                        <p><strong>Date:</strong> {appointment.appointment_date}</p>
+                        <p><strong>Time:</strong> {appointment.appointment_time}</p>
+                        <p><strong>Department:</strong> {appointment.department}</p>
+                        <p><strong>Doctor Name:</strong> {appointment.doctor_name}</p>
+                    </div>
+                ))
+            ) : (
+                <p>No appointments available.</p>
+            )}
         </div>
     );
 }

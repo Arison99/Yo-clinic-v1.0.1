@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { login } from "../Reducers/authReducer";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -9,15 +10,21 @@ function Login() {
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        dispatch(login.pending());
+        const data = { email, password };
         try {
-            const response = await axios.post("http://localhost:3000/api/login", { email, password });
+            const response = await axios.post("http://localhost:3000/api/login", data);
             console.log(response.data);
-            // Dispatch your Redux action here if needed
+            dispatch(login.fulfilled(response.data));
+            localStorage.setItem('userRole', 'doctor'); // Set user role in local storage
+            navigate("/DoctorAppointments"); // Route to doctor appointments page
         } catch (error) {
             console.error("There was an error!", error);
+            dispatch(login.rejected(error.response ? error.response.data : { message: "Internal Server Error" }));
         }
     };
 
@@ -48,7 +55,7 @@ function Login() {
                 <button type="submit" className="w-full font-semibold bg-blue-500 text-white py-2 rounded hover:bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400" disabled={loading}>
                     {loading ? "Logging in..." : "Login"}
                 </button>
-                {error && <p className="text-red-500 mt-4">{error}</p>}
+                {error && <p className="text-red-500 mt-4">{error.message}</p>}
             </form>
         </div>
     );

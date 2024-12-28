@@ -28,6 +28,10 @@ function App() {
   // Replace this with your actual authentication logic
   return localStorage.getItem('userRole') === 'doctor';
   };
+  const handleLogin = (userData) => {
+    localStorage.setItem('userRole', userData.role);
+    navigate('/DoctorAppointments');
+  };
 
   return (
   <Router>
@@ -40,7 +44,6 @@ function App() {
     <Route path="/Departments" element={<Departments />} />
     <Route path="/Appointments" element={<AppointmentsForm />} />
     <Route path="/Ambulance" element={<Ambulance />} />
-    <Route path="/Login" element={<Login />} />
     <Route path="/SignUP" element={<SignUp />} />
     <Route path="/CustomerSupport" element={<CustomerSupport />} />
     <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
@@ -51,10 +54,12 @@ function App() {
     <Route path="/Career" element={<Career />} />
     <Route path="/Development" element={<Development />} />
     <Route path="/Features" element={<Features />} />
+    <Route path="/login" element={<Login />} />
     <Route
-    path="/DoctorAppointments"
-    element={isAuthenticated() ? <DoctorAppointments /> : <Navigate to="/Login" />}
+          path="/DoctorAppointments"
+          element={isAuthenticated() ? <DoctorAppointments /> : <Navigate to="/login" />}
     />
+        <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   </>
   <Footer />

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../Store/authSlice";
 
 function Navbar() {
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const { isLoggedIn, user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -25,9 +25,12 @@ function Navbar() {
                             <Link to="/Appointments" className="text-base font-semibold text-white transition-all duration-200 hover:text-opacity-80"> Appointments </Link>
                             <Link to="/DoctorAppointments" className="text-base font-semibold text-white transition-all duration-200 hover:text-opacity-80"> Doctor's Appointments </Link>
                             <Link to="./Ambulance" className="text-base font-semibold text-white transition-all duration-200 hover:text-opacity-80"> Ambulance </Link>
-                            <div>
+                            <div className="flex items-center space-x-4">
                                 {isLoggedIn ? (
-                                    <button onClick={() => dispatch(logout())}>Logout</button>
+                                    <>
+                                        <img className="w-8 h-8 rounded-full" src="/src/Images/Logo5.png" alt="" />
+                                        <button className="inline-flex items-center justify-center px-5 py-2.5 text-base font-semibold transition-all duration-200 rounded-full bg-blue-500 text-white hover:bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400" onClick={() => dispatch(logout())}>Logout</button>
+                                    </>
                                 ) : (
                                     <>
                                         <Link to="/Login" className="inline-flex items-center justify-center px-5 py-2.5 text-base font-semibold transition-all duration-200 rounded-full bg-blue-500 text-white hover:bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400" role="button"> Login </Link>
@@ -62,7 +65,10 @@ function Navbar() {
                             <Link to="./Ambulance" className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-700">Ambulance</Link>
                             <div>
                                 {isLoggedIn ? (
-                                    <button onClick={() => dispatch(logout())} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-700">Logout</button>
+                                    <>
+                                        <img className="w-8 h-8 rounded-full" src="/src/Images/Logo5.png" alt="User Avatar" />
+                                        <button onClick={() => dispatch(logout())} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-700">Logout</button>
+                                    </>
                                 ) : (
                                     <>
                                         <Link to="/Login" className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-blue-700">Login</Link>

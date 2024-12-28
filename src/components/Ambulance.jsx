@@ -9,10 +9,10 @@ import {
 
 function Ambulance() {
     const [formData, setFormData] = useState({
-        caretakerName: '',
-        patientName: '',
+        caretaker_name: '',
+        patient_name: '',
         emergency: '',
-        phoneNumber: '',
+        phone_number: '',
         address: ''
     });
 
@@ -31,7 +31,7 @@ function Ambulance() {
         e.preventDefault();
         dispatch(requestAmbulanceStart());
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/ambulance-requests/", formData);
+            const response = await axios.post("http://localhost:3000/api/ambulance-requests/", formData);
             dispatch(requestAmbulanceSuccess(response.data));
             console.log("Ambulance request submitted:", response.data);
         } catch (error) {
@@ -45,24 +45,24 @@ function Ambulance() {
                 <h1 className="text-2xl font-semibold mb-4">Ambulance Request Form</h1>
                 {error && <p className="text-red-500">{error}</p>}
                 <div className="mb-4">
-                    <label className="block text-sm font-semibold mb-1" htmlFor="caretakerName">Care Taker's Name</label>
+                    <label className="block text-sm font-semibold mb-1" htmlFor="caretaker_name">Care Taker's Name</label>
                     <input
                         type="text"
-                        id="caretakerName"
-                        name="caretakerName"
-                        value={formData.caretakerName}
+                        id="caretaker_name"
+                        name="caretaker_name"
+                        value={formData.caretaker_name}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm font-semibold mb-1" htmlFor="patientName">Patient's Name</label>
+                    <label className="block text-sm font-semibold mb-1" htmlFor="patient_name">Patient's Name</label>
                     <input
                         type="text"
-                        id="patientName"
-                        name="patientName"
-                        value={formData.patientName}
+                        id="patient_name"
+                        name="patient_name"
+                        value={formData.patient_name}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded"
                         required
@@ -81,12 +81,12 @@ function Ambulance() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-sm font-semibold mb-1" htmlFor="phoneNumber">Phone Number</label>
+                    <label className="block text-sm font-semibold mb-1" htmlFor="phone_number">Phone Number</label>
                     <input
                         type="tel"
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
+                        id="phone_number"
+                        name="phone_number"
+                        value={formData.phone_number}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded"
                         required

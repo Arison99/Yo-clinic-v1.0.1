@@ -19,8 +19,8 @@ app.use(cors({
 // Function to test if Django backend is listening
 const testDjangoBackend = async () => {
     try {
-        const response = await axios.get('http://127.0.0.1:8000/api/signup/');
-        console.log('Django backend is listening:');
+        await axios.get('http://127.0.0.1:8000/api/signup/');
+        console.log('Django backend is listening');
     } catch (error) {
         console.error('Error connecting to Django backend:', error);
     }
@@ -42,7 +42,7 @@ app.post('/api/login', async (req, res) => {
     }
 
     try {
-        const response = await axios.post('http://127.0.0.1:8000/api/login/authenticate/', { email, password }, {
+        const response = await axios.post('http://127.0.0.1:8000/api/login/', { email, password }, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -52,6 +52,59 @@ app.post('/api/login', async (req, res) => {
     } catch (error) {
         console.error('Login error:', error);
         if (error.response) {
+            res.status(error.response.status).json(error.response.data);
+        } else {
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+});
+
+// Route to handle fetching doctor appointments
+app.get('/api/doctor-appointments', async (req, res) => {
+    try {
+        const response = await axios.get('http://127.0.0.1:8000/api/doctor-appointments/');
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error('Error fetching doctor appointments:', error);
+        if (error.response) {
+            res.status(error.response.status).json(error.response.data);
+        } else {
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+});
+// Route to handle fetching all appointments
+app.get('/api/appointments', async (req, res) => {
+    console.log('Received request to fetch all appointments');
+    try {
+        const response = await axios.get('http://127.0.0.1:8000/api/appointments/');
+        console.log('Fetched appointments:', response.data);
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+        if (error.response) {
+            console.error('Error response data:', error.response.data);
+            res.status(error.response.status).json(error.response.data);
+        } else {
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+});
+// Route to handle fetching doctor appointments
+app.post('/api/doctor-appointments', async (req, res) => {
+    console.log('Received doctor appointment request:', req.body);
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/api/doctor-appointments/', req.body, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('Doctor appointment response:', response.data);
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error('Doctor appointment error:', error);
+        if (error.response) {
+            console.error('Error response data:', error.response.data);
             res.status(error.response.status).json(error.response.data);
         } else {
             res.status(500).json({ message: 'Internal Server Error' });

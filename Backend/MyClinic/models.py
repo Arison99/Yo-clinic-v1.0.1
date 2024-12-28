@@ -3,6 +3,23 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 
+class SignUp(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    esn = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=128)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 class Login(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
@@ -13,12 +30,13 @@ class Login(models.Model):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
-    def authenticate(self, email, raw_password):
+    @staticmethod
+    def authenticate(email, raw_password):
         try:
-            user = Login.objects.get(email=email)
-            if user.check_password(raw_password):
+            user = SignUp.objects.get(email=email)
+            if check_password(raw_password, user.password):
                 return user
-        except Login.DoesNotExist:
+        except SignUp.DoesNotExist:
             return None
 
     def __str__(self):
@@ -64,14 +82,12 @@ class AmbulanceRequest(models.Model):
 
     def __str__(self):
         return self.caretaker_name
-    
-class SignUp(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    esn = models.CharField(max_length=100, unique=True)
-    password = models.CharField(max_length=128)
+
+class DoctorAppointment(models.Model):
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"Doctor Appointment for {self.appointment.first_name} {self.appointment.last_name}"
+
+    @staticmethod
+    def get_doctor_appointments():
+        return Appointment.objects.distinct()
